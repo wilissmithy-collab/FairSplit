@@ -775,36 +775,43 @@
       `;
     }
 
-    function getSummaryText() {
-      if (!state.results) return 'No split calculated yet.';
-      const r = state.results;
-      const lines = [];
-      lines.push(`FairSplit — ${r.groupName}`);
-      lines.push(`Total: ${formatMoney(r.total)}`);
-      lines.push(``);
+function getSummaryText() {
+  if (!state.results) return 'No split calculated yet.';
+  const r = state.results;
 
-      if (r.transactions.length) {
-        lines.push(`Who owes who:`);
-        r.transactions.forEach(t => {
-          lines.push(`- ${t.from} pays ${t.to} ${formatMoney(t.amount)}`);
-        });
-      } else {
-        lines.push(`Everyone is settled.`);
-      }
+  const appLink = "https://wilissmithy-collab.github.io/FairSplit/";
 
-      lines.push(``);
-      lines.push(`Balances:`);
-      r.balances.forEach(p => {
-        lines.push(`- ${p.name}: owes ${formatMoney(p.owed)}, paid ${formatMoney(p.paid)}, balance ${p.balance >= 0 ? '+' : ''}${formatMoney(p.balance)}`);
-      });
+  const lines = [];
+  lines.push(`FairSplit — ${r.groupName}`);
+  lines.push(`Total: ${formatMoney(r.total)}`);
+  lines.push(``);
 
-      if (r.notes) {
-        lines.push(``);
-        lines.push(`Notes: ${r.notes}`);
-      }
+  if (r.transactions.length) {
+    lines.push(`Who owes who:`);
+    r.transactions.forEach(t => {
+      lines.push(`- ${t.from} pays ${t.to} ${formatMoney(t.amount)}`);
+    });
+  } else {
+    lines.push(`Everyone is settled.`);
+  }
 
-      return lines.join('\n');
-    }
+  lines.push(``);
+  lines.push(`Balances:`);
+  r.balances.forEach(p => {
+    lines.push(`- ${p.name}: owes ${formatMoney(p.owed)}, paid ${formatMoney(p.paid)}, balance ${p.balance >= 0 ? '+' : ''}${formatMoney(p.balance)}`);
+  });
+
+  if (r.notes) {
+    lines.push(``);
+    lines.push(`Notes: ${r.notes}`);
+  }
+
+  // 🔥 Growth loop line
+  lines.push(``);
+  lines.push(`Sent via FairSplit — ${appLink}`);
+
+  return lines.join('\n');
+}
 
     function copySummary() {
       const text = getSummaryText();
